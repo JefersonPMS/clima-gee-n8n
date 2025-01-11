@@ -9,7 +9,9 @@ from google.oauth2 import service_account
 import os
 
 # Use a variável de ambiente para obter o caminho do arquivo de credenciais
-service_account_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+# Caminho definido para o arquivo montado pelo Secret Manager
+service_account_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "/app/ee-guiapratico4-85863bdf41f1.json")
+
 credentials = service_account.Credentials.from_service_account_file(
     service_account_path,
     scopes=["https://www.googleapis.com/auth/earthengine"]
