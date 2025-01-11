@@ -26,14 +26,14 @@ steps:
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA'
       ]
 
-  # 3. Verificar se o serviço já existe
+  # 3. Verificar se o serviço já existe (ignorar erros)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     id: Check-Service
     entrypoint: 'bash'
     args:
       [
         '-c',
-        'if gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1; then echo "Service exists"; else echo "Service does not exist"; fi'
+        'gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1 || true'
       ]
 
   # 4. Fazer o deploy no Cloud Run
