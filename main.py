@@ -86,7 +86,7 @@ async def get_climate_and_altitude(lat: float, lon: float):
     dem_stats = dem.reduceRegion(
         reducer=ee.Reducer.mean(),
         geometry=buffer_geometry,
-        scale=30,  # Usa uma resolução mais alta para dados de DEM
+        scale=30,  # Usa uma resolução mais alta para dados de DEM  
         bestEffort=True
     ).getInfo()
     altitude_mean = dem_stats.get('elevation', 'No data')  # Obtém o valor médio de elevação  
