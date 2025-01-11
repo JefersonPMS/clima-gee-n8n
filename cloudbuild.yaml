@@ -26,42 +26,24 @@ steps:
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA'
       ]
 
-  # 3. Verificar se o serviço já existe (ignorar erros)
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    id: Check-Service
-    entrypoint: 'bash'
-    args:
-      [
-        '-c',
-        'gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1 || true'
-      ]
-
-  # 4. Fazer o deploy no Cloud Run
+  # 3. Fazer o deploy no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     id: Deploy
-    entrypoint: 'bash'
+    entrypoint: 'gcloud'
     args:
       [
-        '-c',
-        'if gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1; then
-          gcloud run deploy ${_SERVICE_NAME} \
-            --image=${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA \
-            --region=${_DEPLOY_REGION} \
-            --platform=managed \
-            --no-traffic \
-            --tag=test \
-            --allow-unauthenticated \
-            --memory=2Gi \
-            --cpu=2;
-        else
-          gcloud run deploy ${_SERVICE_NAME} \
-            --image=${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA \
-            --region=${_DEPLOY_REGION} \
-            --platform=managed \
-            --allow-unauthenticated \
-            --memory=2Gi \
-            --cpu=2;
-        fi'
+        'run',
+        'deploy',
+        '${_SERVICE_NAME}',
+        '--image',
+        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
+        '--region',
+        '${_DEPLOY_REGION}',
+        '--platform',
+        'managed',
+        '--allow-unauthenticated',
+        '--memory=2Gi',  # Configurar 2 GB de memória
+        '--cpu=2'        # Configurar 2 CPUs
       ]
 
 # Registrar a imagem gerada no Artifact Registry
