@@ -26,26 +26,42 @@ steps:
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA'
       ]
 
-  # 3. Fazer o deploy no Cloud Run com a tag 'test' e sem passar tráfego
+  # 3. Verificar se o serviço já existe
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    id: Deploy
-    entrypoint: 'gcloud'
+    id: Check-Service
+    entrypoint: 'bash'
     args:
       [
-        'run',
-        'deploy',
-        '${_SERVICE_NAME}',
-        '--image',
-        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
-        '--region',
-        '${_DEPLOY_REGION}',
-        '--platform',
-        'managed',
-        '--no-traffic',  # Não direcionar tráfego automaticamente
-        '--tag=test',    # Tag para identificar como revisão de teste
-        '--allow-unauthenticated',
-        '--memory=2Gi',  # Configurar 2 GB de memória
-        '--cpu=2'        # Configurar 2 CPUs
+        '-c',
+        'if gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1; then echo "Service exists"; else echo "Service does not exist"; fi'
+      ]
+
+  # 4. Fazer o deploy no Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: Deploy
+    entrypoint: 'bash'
+    args:
+      [
+        '-c',
+        'if gcloud run services describe ${_SERVICE_NAME} --region=${_DEPLOY_REGION} --platform=managed > /dev/null 2>&1; then
+          gcloud run deploy ${_SERVICE_NAME} \
+            --image=${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA \
+            --region=${_DEPLOY_REGION} \
+            --platform=managed \
+            --no-traffic \
+            --tag=test \
+            --allow-unauthenticated \
+            --memory=2Gi \
+            --cpu=2;
+        else
+          gcloud run deploy ${_SERVICE_NAME} \
+            --image=${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA \
+            --region=${_DEPLOY_REGION} \
+            --platform=managed \
+            --allow-unauthenticated \
+            --memory=2Gi \
+            --cpu=2;
+        fi'
       ]
 
 # Registrar a imagem gerada no Artifact Registry
