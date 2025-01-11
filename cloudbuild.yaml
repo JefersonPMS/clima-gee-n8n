@@ -1,3 +1,8 @@
+substitutions:
+  _SERVICE_NAME: app-clima-n8n-evolution
+  _AR_HOSTNAME: southamerica-east1-docker.pkg.dev
+  _DEPLOY_REGION: southamerica-east1
+
 steps:
   # 1. Fazer build da imagem Docker
   - name: 'gcr.io/cloud-builders/docker'
@@ -6,7 +11,7 @@ steps:
       [
         'build',
         '-t',
-        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
+        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:${SHORT_SHA}',
         '.'
       ]
 
@@ -16,7 +21,7 @@ steps:
     args:
       [
         'push',
-        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA'
+        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:${SHORT_SHA}'
       ]
 
   # 3. Fazer o deploy no Cloud Run
@@ -29,7 +34,7 @@ steps:
         'deploy',
         '${_SERVICE_NAME}',
         '--image',
-        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
+        '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:${SHORT_SHA}',
         '--region',
         '${_DEPLOY_REGION}',
         '--platform',
@@ -40,11 +45,9 @@ steps:
         '--update-secrets=/etc/secrets/senha.json:senha-gee:latest'
       ]
 
-# Registrar a imagem gerada no Artifact Registry
 images:
-  - '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA'
+  - '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:${SHORT_SHA}'
 
-# Configurações adicionais para logging e substituições flexíveis
 options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
