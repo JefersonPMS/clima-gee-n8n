@@ -1,9 +1,3 @@
-# Substituições dinâmicas para tornar o build mais reutilizável
-substitutions:
-  _SERVICE_NAME: app-clima-n8n-evolution
-  _AR_HOSTNAME: southamerica-east1-docker.pkg.dev
-  _DEPLOY_REGION: southamerica-east1
-
 steps:
   # 1. Fazer build da imagem Docker
   - name: 'gcr.io/cloud-builders/docker'
@@ -54,9 +48,3 @@ images:
 options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
-
-# Adicionando permissão para acessar o Secret Manager no runtime
-availableSecrets:
-  secretManager:
-    - versionName: "projects/152190816099/secrets/senha-gee/versions/latest"
-      env: "GOOGLE_APPLICATION_CREDENTIALS"
