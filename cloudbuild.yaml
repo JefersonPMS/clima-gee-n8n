@@ -42,7 +42,7 @@ steps:
         '--allow-unauthenticated',
         '--memory=2Gi',
         '--cpu=2',
-        '--update-secrets=/etc/secrets/senha.json:senha-gee:latest'
+        '--update-secrets=/etc/secrets/senha.json=senha-gee:latest'
       ]
 
 images:
