@@ -11,10 +11,10 @@ steps:
     args:
       [
         'build',
-        '--no-cache', # Adicionado para garantir um build "limpo"
+        '--no-cache',
         '-t',
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
-        '.' # Diretório do Dockerfile
+        '.'
       ]
 
   # 2. Enviar a imagem para o Artifact Registry
@@ -42,8 +42,8 @@ steps:
         '--platform',
         'managed',
         '--allow-unauthenticated',
-        '--memory=2Gi',  # Configurar 2 GB de memória
-        '--cpu=2'        # Configurar 2 CPUs
+        '--memory=2Gi',
+        '--cpu=2'
       ]
 
 # Registrar a imagem gerada no Artifact Registry
@@ -59,3 +59,9 @@ options:
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - ${_SERVICE_NAME}
+
+# Conceder permissão para acessar o Secret Manager
+availableSecrets:
+  secretManager:
+  - versionName: projects/152190816099/secrets/senha-gee/versions/latest
+    env: 'GOOGLE_APPLICATION_CREDENTIALS'
