@@ -14,8 +14,8 @@ RUN pip install -r requirements.txt
 # Defina a variável de ambiente para o arquivo de credenciais
 ENV GOOGLE_APPLICATION_CREDENTIALS="/app/ee-guiapratico4-85863bdf41f1.json"
 
-# Exponha a porta 8000
-EXPOSE 8000
+# Exponha a porta 8080 (necessário para o Cloud Run)
+EXPOSE 8080
 
 # Comando para iniciar a aplicação
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
