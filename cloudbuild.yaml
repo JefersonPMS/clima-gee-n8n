@@ -54,7 +54,7 @@ options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
 
-# Adicionando permissão para acessar o Secret Manager
+# Adicionando permissão para acessar o Secret Manager no runtime
 availableSecrets:
   secretManager:
     - versionName: "projects/152190816099/secrets/senha-gee/versions/latest"
