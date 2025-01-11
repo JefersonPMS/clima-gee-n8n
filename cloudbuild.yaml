@@ -11,12 +11,10 @@ steps:
     args:
       [
         'build',
-        '--no-cache',
         '-t',
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
         '.'
       ]
-    secretEnv: ['GOOGLE_APPLICATION_CREDENTIALS']
 
   # 2. Enviar a imagem para o Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -56,13 +54,8 @@ options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
 
-# Adicionando tags para rastreamento e categorização do build
-tags:
-  - gcp-cloud-build-deploy-cloud-run
-  - ${_SERVICE_NAME}
-
-# Conceder permissão para acessar o Secret Manager
+# Adicionando permissão para acessar o Secret Manager
 availableSecrets:
   secretManager:
-  - versionName: projects/152190816099/secrets/senha-gee/versions/latest
-    env: 'GOOGLE_APPLICATION_CREDENTIALS'
+    - versionName: "projects/152190816099/secrets/senha-gee/versions/latest"
+      env: "GOOGLE_APPLICATION_CREDENTIALS"
