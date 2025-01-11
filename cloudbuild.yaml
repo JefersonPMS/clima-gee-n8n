@@ -16,6 +16,7 @@ steps:
         '${_AR_HOSTNAME}/${PROJECT_ID}/repositorio-app-clima-n8n/${_SERVICE_NAME}:$SHORT_SHA',
         '.'
       ]
+    secretEnv: ['GOOGLE_APPLICATION_CREDENTIALS']
 
   # 2. Enviar a imagem para o Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
