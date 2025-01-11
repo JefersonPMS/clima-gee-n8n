@@ -89,7 +89,7 @@ async def get_climate_and_altitude(lat: float, lon: float):
         scale=30,  # Usa uma resolução mais alta para dados de DEM
         bestEffort=True
     ).getInfo()
-    altitude_mean = dem_stats.get('elevation', 'No data')  # Obtém o valor médio de elevação
+    altitude_mean = dem_stats.get('elevation', 'No data')  # Obtém o valor médio de elevação  
 
     return {
         "climate_data": stats_list,
