@@ -74,9 +74,9 @@ async def get_climate_and_altitude(lat: float, lon: float):
     # Prepara DataFrame para gráficos (se necessário)
     df = pd.DataFrame(stats_list)
     df['Month'] = df['month'].map({
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr',
-        5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug',
-        9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+        1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr',
+        5: 'Mai', 6: 'Jun', 7: 'Jul', 8: 'Aug',
+        9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez'
     })
     df['temp'] = (df['tempMax'] + df['tempMin']) / 2
 
